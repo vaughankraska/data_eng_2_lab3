@@ -20,6 +20,11 @@ services:
     build:
       context: .
     command: ray start --address=ray-head:6379 --block
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"  # Maximum 1 CPU core
+          memory: "2G"
     depends_on:
       - ray-head
     networks:
