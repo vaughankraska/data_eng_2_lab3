@@ -1,4 +1,3 @@
-# Step 1: Import Libraries
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score, KFold
 import pandas as pd

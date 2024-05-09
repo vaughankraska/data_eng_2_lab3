@@ -1,6 +1,6 @@
-### Building and running your application
+### running default tuning
+Runs the default tuning parameters for the forest classification problem
 
-When you're ready, start your application by running:
 `docker compose up --build`.
 
 ### Deploying your application to the cloud

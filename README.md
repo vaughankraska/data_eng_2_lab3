@@ -8,6 +8,7 @@ scaling up machine learning tasks and pipelines to a distributed setting.
 - The data: https://www.kaggle.com/c/forest-cover-type-prediction
 - Fit default parameters to the dataset using sklearn.ensemble.RandomForestClassifier
 - Then use Ray Tune to do hyper parameter tuning.
+To run the default tuning, cd into /tuning and run `docker compose up` or alternatively python main.py with the proper dependencies (listed in requirements.txt). 
 Questions to answer:
 Q1) The hyperparameters found and the associated cross-validation score. How does it
 compare to the score for the default parameters?
