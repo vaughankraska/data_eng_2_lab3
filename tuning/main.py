@@ -14,7 +14,7 @@ clf = RandomForestClassifier()  # default hyperparameters
 print("Default Hyper Parameters:\n", clf.get_params())
 
 start_time = time.time()
-k = 10
+k = 10 
 kfold = KFold(n_splits=k, shuffle=True, random_state=123)
 cv_scores = cross_val_score(clf,
                             x_train,

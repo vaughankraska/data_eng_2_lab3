@@ -1,13 +1,11 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score, KFold
-from ray import tune
-import pandas as pd
+from ray import tune, data
 
 
-def train_model(config):
+def train_model(config, data):
 
-    # load data
-    train_df = pd.read_csv("data/train.csv")
+    train_df = data.to_pandas()
 
     x_train = train_df.drop(columns=["Cover_Type"])
     y_train = train_df["Cover_Type"]
@@ -16,7 +14,7 @@ def train_model(config):
     clf = RandomForestClassifier()  # default hyperparameters
     print("Default Hyper Parameters:\n", clf.get_params())
 
-    k = 10
+    k = 5
     kfold = KFold(n_splits=k, shuffle=True, random_state=123)
     cv_scores = cross_val_score(clf,
                                 x_train,
@@ -24,25 +22,34 @@ def train_model(config):
                                 cv=kfold,
                                 scoring="accuracy"
                                 )
+    score = cv_scores.mean()
 
-    print("Accuracy:", cv_scores.mean())
-    tune.report(accuracy=cv_scores.mean())
+    return {"score": score}
 
 
 search_space = {
-        "n_estimators": tune.randint(50, 200),
-        "max_depth": tune.randint(1, 10),
-        "min_samples_split": tune.uniform(0.01, 0.1),
+        "n_estimators": tune.grid_search([50, 200]),
+        "max_depth": tune.grid_search([1, 4, 10]),
+        "ccp_alpha": tune.grid_search([0, .5]),
         }
 
-analysis = tune.run(
-        train_model,
-        config=search_space,
-        num_samples=20,
-        resources_per_trial={"cpu": 0.5, "gpu": 0},
-        )
+# load data
+train_dataset = data.read_csv("./train.csv")
+print("Schema:\n", train_dataset.schema())
 
-best = analysis.best_config
-print("Best HP:\n", best)
+# trainable_with_resources = tune.with_resources(trainable, {"cpu": 0.5})
+
+tuner = tune.Tuner(
+        tune.with_parameters(train_model, data=train_dataset),
+        param_space=search_space,
+        tune_config=tune.TuneConfig(
+            metric="score", mode="max"
+            ),
+        # trainable_with_resources
+        )
+results = tuner.fit()
+
+
+print("Best HP:\n", results.get_best_result())
 print("----------------")
-print("Results:\n", analysis.results)
+print("Results:\n", results.get_dataframe())

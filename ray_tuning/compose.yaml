@@ -6,7 +6,7 @@ services:
   ray-head:
     build:
       context: .
-    command: ray start --head --port=6379 --dashboard-host=0.0.0.0 --block
+    command: ray start --temp-dir="/tmp/test_tmp" --head --port=6379 --dashboard-host=0.0.0.0 --block
     ports:
       - "6379:6379"
       - "8265:8265"
