@@ -47,6 +47,8 @@ docker swarm join --token <SWARM TOKEN> <YOUR MANGER'S LOCAL IP>:2377
 Add a registry to share images across the cluster:
 ```bash
 docker service create --name registry --publish published=5000,target=5000 registry:2
+//push containers to the swarm registry with:
+docker compose push
 ```
 
 Get your managers token again by running (it will print the command you need to add a worker node the cluster):
@@ -74,10 +76,19 @@ The "tuning" directory contains everyting needed to run part 1.1 ie running the 
 The "ray_tuning" directory contains everything needed to run the distributed tuning of the model using Ray Tune. The app has also been dockerized and the ray instances can be controlled with docker compose. The default compose spawns one Ray head node (in a container) and one worker node. Testing the tuning times can be controlled by modifiying the deploy resources and/or the worker count. You can also modify the script to tell Ray to limit resources but I wanted to guarantee resource limits on the services and more easily add nodes to the cluster (via Docker Swarm).
 
 #### To run on a single node:
-
+```bash
+cd ray_tuning
+docker compose up --build
+```
 
 #### To run on across the swarm cluster:
-
+```
+docker stack deploy -c compose.swarm.yaml tune
+```
+Then run the job by submitting the tune.py job to the ray head node. You can scale the work to other nodes by replicating the worker node with
+```bash
+docker service scale tune_ray-worker=<number>
+```
 
 
 
