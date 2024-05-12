@@ -50,10 +50,15 @@ docker swarm join-token worker
 ```
 
 cd into data_eng_lab3 to run the different application related to the assignment.
-ex. after starting the services)
+
+ex)
 ```bash
+cd tune
+docker compose up -d
 docker exec -it <RAY HEAD CONTAINER ID> /bin/bash
-ray job submit -- python tune.py
+python main.py
+// or if its a ray job
+ray job submit -- python <JOB SCRIPT .py>
 ```
 
 ### /tuning 

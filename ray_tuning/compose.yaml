@@ -10,8 +10,6 @@ services:
     ports:
       - "6379:6379"
       - "8265:8265"
-    networks:
-      - ray_network
     environment:
       - RAY_ADDRESS=auto
     shm_size: "2G"
@@ -27,10 +25,5 @@ services:
           memory: "2G"
     depends_on:
       - ray-head
-    networks:
-      - ray_network
     shm_size: "2G"
 
-networks:
-  ray_network:
-    driver: bridge
