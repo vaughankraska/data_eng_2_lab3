@@ -44,6 +44,11 @@ Add new nodes to the cluster by running the following on the other VMs:
 docker swarm join --token <SWARM TOKEN> <YOUR MANGER'S LOCAL IP>:2377
 ```
 
+Add a registry to share images across the cluster:
+```bash
+docker service create --name registry --publish published=5000,target=5000 registry:2
+```
+
 Get your managers token again by running (it will print the command you need to add a worker node the cluster):
 ```bash
 docker swarm join-token worker

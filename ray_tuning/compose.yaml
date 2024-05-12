@@ -13,6 +13,8 @@ services:
     environment:
       - RAY_ADDRESS=auto
     shm_size: "2G"
+    networks:
+      - ray_network
 
   ray-worker:
     build:
@@ -26,4 +28,9 @@ services:
     depends_on:
       - ray-head
     shm_size: "2G"
+    networks:
+      - ray_network
+networks:
+  ray_network:
+    driver: bridge
 
