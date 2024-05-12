@@ -1,6 +1,7 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score, KFold
 from ray import tune, data
+import time
 
 
 def train_model(config, data):
@@ -47,9 +48,13 @@ tuner = tune.Tuner(
             ),
         # trainable_with_resources
         )
+start_time = time.time()
 results = tuner.fit()
-
+end_time = time.time()
+elapsed = end_time - start_time
 
 print("Best HP:\n", results.get_best_result())
 print("----------------")
 print("Results:\n", results.get_dataframe())
+print("-------TIME---------")
+print(f"Parameter tuning took {elapsed:.6f} seconds")

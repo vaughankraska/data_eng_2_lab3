@@ -50,6 +50,11 @@ docker swarm join-token worker
 ```
 
 cd into data_eng_lab3 to run the different application related to the assignment.
+ex. after starting the services)
+```bash
+docker exec -it <RAY HEAD CONTAINER ID> /bin/bash
+ray job submit -- python tune.py
+```
 
 ### /tuning 
 The "tuning" directory contains everyting needed to run part 1.1 ie running the cross validation on tree classification of forestry type with the default parameters. The script has been dockerized and running `docker compose up --build` will build the python image and run the main.py script and print the results. The script can also be run with a python virutal environment (venv) using `pip install -r requirements.txt` and then `python main.py`.
